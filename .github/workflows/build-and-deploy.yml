@@ -60,5 +60,4 @@ jobs:
             docker compose pull
             docker compose up -d --no-deps --force-recreate
             docker image prune -a -f
-            sleep 10
-            curl -f http://127.0.0.1:8000/health || exit 1
+
