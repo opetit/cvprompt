@@ -1,6 +1,8 @@
 services:
   interactive-resume:
     image: ghcr.io/opetit/cvprompt:latest
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
     ports:
       - 8000:8000
     volumes:
