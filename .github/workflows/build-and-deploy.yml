@@ -46,7 +46,7 @@ jobs:
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.SSH_KEY }}
+          password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.SSH_PORT }}
           source: "docker-compose.yml"
           target: "cvprompt/docker-compose.yml"
