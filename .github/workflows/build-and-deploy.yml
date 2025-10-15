@@ -45,7 +45,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           source: "docker-compose.yml"
-          target: "cvprompt/docker-compose.yml"
+          target: "cvprompt"
           overwrite: true
       - name: SSH to server
         uses: appleboy/ssh-action@v1
