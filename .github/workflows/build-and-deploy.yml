@@ -23,26 +23,22 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and Push Docker image
-        id: push
-        uses: docker/build-push-action@v6
-        with:
-          push: false
-          tags: ghcr.io/${{ github.repository }}:latest
+      #- name: Build and Push Docker image
+      #  id: push
+      #  uses: docker/build-push-action@v6
+      #  with:
+      #    push: false
+      #    tags: ghcr.io/${{ github.repository }}:latest
 
   deploy-on-vps:
     needs: build-docker-image
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: read
-      packages: write
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Copy Compose File to Server
-        uses: appleboy/scp-action@v0.1.4
+        uses: appleboy/scp-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
@@ -50,6 +46,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           source: "docker-compose.yml"
           target: "cvprompt/docker-compose.yml"
+          overwrite: true
       - name: SSH to server
         uses: appleboy/ssh-action@v1
         with:
