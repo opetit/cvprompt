@@ -1,0 +1,7 @@
+services:
+  interactive-resume:
+    image: ghcr.io/opetit/cvprompt:latest
+    ports:
+      - 8000:8000
+    volumes:
+      - ./data:/data
