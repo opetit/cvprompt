@@ -23,12 +23,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      #- name: Build and Push Docker image
-      #  id: push
-      #  uses: docker/build-push-action@v6
-      #  with:
-      #    push: false
-      #    tags: ghcr.io/${{ github.repository }}:latest
+      - name: Build and Push Docker image
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          push: false
+          tags: ghcr.io/${{ github.repository }}:latest
 
   deploy-on-vps:
     needs: build-docker-image
