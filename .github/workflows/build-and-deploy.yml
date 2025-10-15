@@ -27,7 +27,7 @@ jobs:
         id: push
         uses: docker/build-push-action@v6
         with:
-          push: true
+          push: false
           tags: ghcr.io/${{ github.repository }}:latest
 
   deploy-on-vps:
@@ -42,11 +42,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Copy Compose File to Server
-        uses: appleboy/scp-action@v1
+        uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
+          key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           source: "docker-compose.yml"
           target: "cvprompt/docker-compose.yml"
