@@ -88,6 +88,7 @@ async def ranker(input_query: SearchRequest, request: Request):
         top_projects.append(ScoredProject(id=project["id"],
                                           score=float(project_stats[idx]),
                                           name=project["name"],
+                                          company=project["company"],
                                           description=project["full_desc"]))
         
     response = SearchResponse(chunks=top_k_chunks, projects=top_projects)

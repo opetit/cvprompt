@@ -12,6 +12,7 @@ class ScoredProject(BaseModel):
     id: int
     score: float
     name: str
+    company: str
     description: str
 
 
