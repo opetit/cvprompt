@@ -18,18 +18,18 @@ SCORE_THRESHOLD = 0.4
 K = 5
 
 PROJECTS_FILE = "data/projects.json"
-CHUNKS_FILE = "data/chunks.json"
 EMBEDDED_CHUNKS_FILE = "data/embedded_chunks.npy"
 LOG_FILE = "data/logs.csv"
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    app.state.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+    app.state.embedding_model = SentenceTransformer("sentence-transformers/multi-qa-mpnet-base-cos-v1")
     with open(PROJECTS_FILE, "r") as f:
         app.state.projects = json.load(f)
-    with open(CHUNKS_FILE, "r") as f:
-        app.state.chunks = json.load(f)
+    app.state.chunks = []
+    for project in app.state.projects:
+        app.state.chunks += [{"project_id": project["id"], "content": chunk} for chunk in project["chunks"]]
     app.state.embedded_chunks = np.load(EMBEDDED_CHUNKS_FILE)
     LOG.info(f"{len(app.state.projects)} projects loaded and {len(app.state.chunks)} chunks...")
 
@@ -61,7 +61,7 @@ app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
 
 @app.post("/search")
 async def ranker(input_query: SearchRequest, request: Request):
-    embedded_query = app.state.embedding_model.encode_query(input_query.query, prompt="Demande du client : ")
+    embedded_query = app.state.embedding_model.encode_query(input_query.query)
     similarities = app.state.embedding_model.similarity(embedded_query, app.state.embedded_chunks)[0].numpy()
     ranked_ids = np.argsort(similarities)[::-1][:K] #  Top K
 
